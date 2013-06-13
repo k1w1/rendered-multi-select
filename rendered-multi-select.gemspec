@@ -11,11 +11,15 @@ Gem::Specification.new do |s|
   s.summary     = %q{todo}
   s.description = %q{todo}
 
-  s.files         = Dir["vendor/assets/javascripts/*.js.coffee", "vendor/assets/stylesheets/*.css.less", "lib/content_editor.rb", "lib/*" "README.md", "MIT-LICENSE"]
+  s.files         = Dir["vendor/assets/javascripts/*.js.coffee", "vendor/assets/stylesheets/*.css.less", "lib/*" "README.md", "MIT-LICENSE"]
   s.require_paths = ["lib"]
 
   s.add_dependency 'rails', "~> 3.1"
-  s.add_dependency "jquery-rails"
-  s.add_dependency 'coffee-rails'
+  s.add_dependency 'jquery-rails'
+  s.add_dependency 'less-rails-bootstrap'
+  s.add_development_dependency 'coffee-rails'
+  s.add_development_dependency 'sprockets'
+  s.add_development_dependency 'therubyracer'
+  
   
 end
