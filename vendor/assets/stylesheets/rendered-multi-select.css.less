@@ -11,10 +11,32 @@ ul.rendered-multi-select {
     margin-right: 4px;
   }
   >li.rendered-multi-select-input {
+    position: relative;
     input {
       display: inline-block;
       border: none;
       outline: none;
+    }
+    .rendered-multi-select-menu {
+      border: 1px solid #ccc;
+      background-color: white;
+      position: absolute;
+      min-width: 200px;
+      display: none;
+      
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        
+        li {
+          cursor: default;
+          
+          &:hover {
+            background-color: #eee; 
+          }
+        }
+      }
     }
   }
 }

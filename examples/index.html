@@ -18,10 +18,22 @@
   <p>example 1</p>
   
   <ul class="rendered-multi-select">
-    <li class="rendered-multi-select-element">Foo<a href="#">x</a></li>
-    <li class="rendered-multi-select-element">Foo<a href="#">x</a></li>
+    <li class="rendered-multi-select-element" data-id="1">Foo<b>x</b></li>
+    <li class="rendered-multi-select-element" data-id="2">Foo<b>x</b></li>
     <li class="rendered-multi-select-input"><input type="text" /></li>
   </ul>
+  
+  <script>
+    $(".rendered-multi-select").renderedMultiSelect({
+      onQuery: function(q, callback) {
+        callback([
+          {id: 123, name: "Javascript"},
+          {id: 123, name: "Scala"},
+          {id: 123, name: "Another"},
+          ]);
+      }
+    });
+  </script>
   
 </body>
 </html>
