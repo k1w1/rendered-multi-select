@@ -1,17 +1,4 @@
-(($, window) ->
-
-  ###
-  query: (options) ->
-    $.ajax
-      type: 'GET'
-      url: '/tags?q=' + options.term
-      dataType: 'json'
-      success: (data) ->
-        options.callback
-          results: data
-          more: false
-  ###  
-          
+(($, window) ->   
           
   class RenderedMultiSelect
     constructor: (@element, @options) ->
@@ -47,7 +34,7 @@
         when 13 # Enter
           if (result = @resultList.find("li").filter(".selected")).length != 0
             @addItem(result)
-          else
+          else if @options.allowNew
             @createNewItem(@input.val())
         when 40 # Down arrow
           @selectNextResult(1)
