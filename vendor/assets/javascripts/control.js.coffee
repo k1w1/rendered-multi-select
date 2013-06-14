@@ -89,7 +89,6 @@
           @showQueryResults(results)
     
     showQueryResults: (results) ->
-      console.log("showqueryresults")
       @resultList.empty()
       # Compute existing items so we can remove duplicates.
       existingItems = @element.find(".rendered-multi-select-element")
@@ -103,7 +102,8 @@
         resultAdded = true
       @resultMenu.css("left", @input.position().left + "px")
       if resultAdded
-        @resultMenu.show() 
+        # Only if we have focus.
+        @resultMenu.show() if $(@input).is(":focus")
       else
         @resultMenu.hide()
       
