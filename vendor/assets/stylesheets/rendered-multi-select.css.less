@@ -2,7 +2,6 @@ ul.rendered-multi-select {
   border: 1px solid #eee;
   list-style: none;
   margin: 0;
-  padding: 3px;
   
   &:after {
     clear: both;
@@ -16,7 +15,7 @@ ul.rendered-multi-select {
     border: 1px solid #ccc;
     background-color: #f0f0f0;
     color: #333333;
-    margin-right: 4px;
+    margin: 2px;
     border-radius: 3px 3px 3px 3px;
     padding: 2px;
     padding-left: 4px;
@@ -35,11 +34,19 @@ ul.rendered-multi-select {
   >li.rendered-multi-select-input {
     float: left;
     position: relative;
+    margin: 4px;
     input {
       display: inline-block;
       border: none;
       outline: none;
       width: 75px;
+      margin: 0;
+      padding: 0;
+      
+      box-shadow: none;
+      &:focus {
+        box-shadow: none;
+      }
     }
     .rendered-multi-select-menu {
       border: 1px solid #ccc;
@@ -49,6 +56,7 @@ ul.rendered-multi-select {
       min-height: 10px;
       max-height: 250px;
       display: none;
+      z-index: 100;
       
       ul {
         list-style: none;

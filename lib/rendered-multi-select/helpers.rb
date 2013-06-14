@@ -4,7 +4,10 @@ module RenderedMultiSelect
     def rendered_multi_select(elements, options = {})
       options.symbolize_keys!
       
-      content_tag(:ul, :class => "rendered-multi-select", :id => options[:id]) do
+      html_options = options[:html] || {}
+      tag_options = html_options.merge(:class => "rendered-multi-select #{html_options[:class]}")
+      
+      content_tag(:ul, tag_options) do
         s = ""
         elements.each do |element|
           text, value = option_text_and_value(element).map { |item| item.to_s }
