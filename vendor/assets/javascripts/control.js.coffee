@@ -2,13 +2,12 @@
           
   class RenderedMultiSelect
     constructor: (@element, @options) ->
+      return if @element.data("readonly") == "true"
       @inputContainer = @element.find(".rendered-multi-select-input")
       @input = @inputContainer.find("input")
       @createResultMenu()
       @registerEvents()
       @lastName = null
-      
-    destroy: () ->
       
     registerEvents: ->
       @element.on "keydown", "input", (event) =>
