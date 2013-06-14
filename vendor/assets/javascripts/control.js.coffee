@@ -27,10 +27,10 @@
         @inputKeyDown(event)
       @element.on "keyup", "input", (event) =>
         @updateQuery(event)
-      @element.on "click", ".rendered-multi-select-element b", (event) =>
-        @deleteItem($(event.target).parent(".rendered-multi-select-element"))
       @element.on "click", ".rendered-multi-select-menu li", (event) =>
         @addItem($(event.target).attr("data-id"), $(event.target).html())
+      @element.on "click", ".rendered-multi-select-element b", (event) =>
+        @deleteItem($(event.target).parent(".rendered-multi-select-element"))
     
     createResultMenu: ->
       @resultMenu = $("<div class='rendered-multi-select-menu'><ul class='rendered-multi-select-results'></ul></div")
