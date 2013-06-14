@@ -1,5 +1,4 @@
 ul.rendered-multi-select {
-  border: 1px solid #eee;
   list-style: none;
   margin: 0;
   
@@ -12,14 +11,14 @@ ul.rendered-multi-select {
   
   >li.rendered-multi-select-element {
     float: left;
-    border: 1px solid #ccc;
-    background-color: #f0f0f0;
+    background-color: white;
+    border: 1px solid #eee;
     color: #333333;
     margin: 2px;
     border-radius: 3px 3px 3px 3px;
-    padding: 2px;
-    padding-left: 4px;
-    font-size: 12px;
+    padding: 3px;
+    font-size: 11px;
+    line-height: 13px;
     cursor: default;
     
     b {
@@ -27,14 +26,18 @@ ul.rendered-multi-select {
       padding-right: 3px;
       color: #777;
       font-weight: bold;
-      font-size: 13px;
+      font-size: 14px;
       cursor: pointer;
+      
+      &:hover {
+        color: #333;
+      }
     }
   }
   >li.rendered-multi-select-input {
     float: left;
     position: relative;
-    margin: 4px;
+    margin: 2px;
     input {
       display: inline-block;
       border: none;
@@ -42,6 +45,9 @@ ul.rendered-multi-select {
       width: 75px;
       margin: 0;
       padding: 0;
+      font-size: 11px;
+      line-height: 13px;
+      background-color: transparent;
       
       box-shadow: none;
       &:focus {

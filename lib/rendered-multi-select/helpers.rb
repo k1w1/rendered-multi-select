@@ -12,7 +12,7 @@ module RenderedMultiSelect
         elements.each do |element|
           text, value = option_text_and_value(element).map { |item| item.to_s }
           s << content_tag(:li, :class => "rendered-multi-select-element", "data-id" => value) do
-            "#{h(text)}<b>x</b>".html_safe
+            "#{h(text)}<b>&times;</b>".html_safe
           end
         end
         s.html_safe + content_tag(:li, :class => "rendered-multi-select-input") do

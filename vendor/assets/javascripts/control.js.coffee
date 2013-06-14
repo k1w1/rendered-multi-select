@@ -16,8 +16,11 @@
       @element.on "keyup", "input", (event) =>
         @updateQuery(event)
       @element.on "blur", "input", (event) =>
+        @element.removeClass("rendered-multi-select-active")
         @resultMenu.fadeOut()
       @element.on "focus", "input", (event) =>
+        @element.addClass("rendered-multi-select-active")
+        @lastName = null
         @updateQuery()
       @element.on "click", ".rendered-multi-select-menu li", (event) =>
         @addItem($(event.target))
@@ -52,6 +55,7 @@
       event.preventDefault()
   
     clearInput: ->
+      @lastName = null
       @input.val("")
       @resultMenu.hide()
       
@@ -60,13 +64,16 @@
       return if name.length == 0
       if @options.onCreateItem
         return unless name = @options.onCreateItem(name)
+      @inputContainer.before("<li class='rendered-multi-select-element'>#{name}<b>&times;</b></li>")
       @clearInput()
-      @inputContainer.before("<li class='rendered-multi-select-element'>#{name}<b>x</b></li>")
+      @updateQuery()
     
     deleteLastItem: ->
       lastItem = @element.find(".rendered-multi-select-element").last()
       return if lastItem.length == 0
       @deleteItem(lastItem)
+      @lastName = null
+      @updateQuery()
       
     deleteItem: (item) ->
       if @options.onDeleteItem
@@ -105,8 +112,9 @@
       name = result.html()
       if @options.onAddItem
         @options.onAddItem(id, name)
+      @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}'>#{name}<b>&times;</b></li>")
       @clearInput()
-      @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}'>#{name}<b>x</b></li>")
+      @updateQuery()
     
     selectNextResult: (offset) ->
       items = @resultList.find("li")
