@@ -19,7 +19,8 @@
       @input = @inputContainer.find("input")
       @createResultMenu()
       @registerEvents()
-
+      @lastName = null
+      
     destroy: () ->
       
     registerEvents: ->
@@ -27,8 +28,12 @@
         @inputKeyDown(event)
       @element.on "keyup", "input", (event) =>
         @updateQuery(event)
+      @element.on "blur", "input", (event) =>
+        @resultMenu.fadeOut()
+      @element.on "focus", "input", (event) =>
+        @updateQuery()
       @element.on "click", ".rendered-multi-select-menu li", (event) =>
-        @addItem($(event.target).attr("data-id"), $(event.target).html())
+        @addItem($(event.target))
       @element.on "click", ".rendered-multi-select-element b", (event) =>
         @deleteItem($(event.target).parent(".rendered-multi-select-element"))
     
@@ -40,13 +45,14 @@
     inputKeyDown: (event) ->
       switch event.keyCode
         when 13 # Enter
-          @createNewItem(@input.val())
+          if (result = @resultList.find("li").filter(".selected")).length != 0
+            @addItem(result)
+          else
+            @createNewItem(@input.val())
         when 40 # Down arrow
-          # Next result
-          ""
+          @selectNextResult(1)
         when 38 # Up arrow
-          # Previous result
-          ""
+          @selectNextResult(-1)
         when 8 # Backspace
           if @input.val().length > 0
             return
@@ -82,23 +88,50 @@
      
     updateQuery: ->
       q = $.trim(@input.val())
-      return if q.length == 0
+      return if @lastName == q
+      @lastName = q
       if @options.onQuery
         @options.onQuery q, (results) =>
           @showQueryResults(results)
     
     showQueryResults: (results) ->
+      console.log("showqueryresults")
       @resultList.empty()
+      # Compute existing items so we can remove duplicates.
+      existingItems = @element.find(".rendered-multi-select-element")
+        .map (index, element) ->
+          $(element).text().slice(0,-1)
+        .get()
+      resultAdded = false
       for result in results
+        continue if $.inArray(result.name, existingItems) != -1
         @resultList.append("<li data-id='#{result.id}'>#{result.name}</li>")
+        resultAdded = true
       @resultMenu.css("left", @input.position().left + "px")
-      @resultMenu.show()
+      if resultAdded
+        @resultMenu.show() 
+      else
+        @resultMenu.hide()
       
-    addItem: (id, name) ->
+    addItem: (result) ->
+      id = result.attr("data-id")
+      name = result.html()
       if @options.onAddItem
         @options.onAddItem(id, name)
       @clearInput()
       @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}'>#{name}<b>x</b></li>")
+    
+    selectNextResult: (offset) ->
+      items = @resultList.find("li")
+      currentIndex = items.index(items.filter(".selected"))
+      items.removeClass("selected")
+      currentIndex += offset
+      if currentIndex >= items.length
+        @resultList.find("li").first().addClass("selected")
+      else if currentIndex < 0
+        @resultList.find("li").last().addClass("selected")
+      else
+        $(items[currentIndex]).addClass("selected")
       
   $.fn.renderedMultiSelect = (options, args...) ->
     @each ->

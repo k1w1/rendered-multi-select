@@ -14,8 +14,23 @@ ul.rendered-multi-select {
   >li.rendered-multi-select-element {
     float: left;
     border: 1px solid #ccc;
-    background-color: #eee;
+    background-color: #f0f0f0;
+    color: #333333;
     margin-right: 4px;
+    border-radius: 3px 3px 3px 3px;
+    padding: 2px;
+    padding-left: 4px;
+    font-size: 12px;
+    cursor: default;
+    
+    b {
+      padding-left: 4px;
+      padding-right: 3px;
+      color: #777;
+      font-weight: bold;
+      font-size: 13px;
+      cursor: pointer;
+    }
   }
   >li.rendered-multi-select-input {
     float: left;
@@ -30,6 +45,8 @@ ul.rendered-multi-select {
       background-color: white;
       position: absolute;
       min-width: 200px;
+      min-height: 10px;
+      max-height: 250px;
       display: none;
       
       ul {
@@ -39,8 +56,15 @@ ul.rendered-multi-select {
         
         li {
           cursor: default;
+          color: #444;
+          font-size: 13px;
+          padding: 3px;
+          padding-left: 6px;
           
           &:hover {
+            background-color: #eee; 
+          }
+          &.selected {
             background-color: #eee; 
           }
         }
