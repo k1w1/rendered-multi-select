@@ -63,7 +63,7 @@
       return if name.length == 0
       if @options.onCreateItem
         return unless name = @options.onCreateItem(name)
-      @inputContainer.before("<li class='rendered-multi-select-element'>#{name}<b>&times;</b></li>")
+      @addItemRow(name)
       @clearInput()
       @updateQuery()
     
@@ -111,7 +111,7 @@
       name = result.html()
       if @options.onAddItem
         @options.onAddItem(id, name)
-      @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}'>#{name}<b>&times;</b></li>")
+      @addItemRow(name, id)
       @clearInput()
       @updateQuery()
     
@@ -126,6 +126,11 @@
         @resultList.find("li").last().addClass("selected")
       else
         $(items[currentIndex]).addClass("selected")
+      
+    addItemRow: (name, id) ->
+      if @options.onStyleItem
+        style = @options.onStyleItem(name)
+      @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'>#{name}<b>&times;</b></li>")  
       
   $.fn.renderedMultiSelect = (options, args...) ->
     @each ->

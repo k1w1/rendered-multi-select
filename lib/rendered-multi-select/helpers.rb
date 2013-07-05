@@ -19,7 +19,16 @@ module RenderedMultiSelect
         s = ""
         elements.each do |element|
           text, value = option_text_and_value(element).map { |item| item.to_s }
-          s << content_tag(:li, :class => "rendered-multi-select-element", "data-id" => value) do
+          ::Rails.logger.debug("BLOCK GIVEN: #{block_given?}")
+          if block_given?
+            style = yield text
+          else
+            style = nil
+          end
+          
+          ::Rails.logger.debug("STYLE: #{style.inspect}")
+          
+          s << content_tag(:li, :class => "rendered-multi-select-element", "data-id" => value, :style => style) do
             "#{h(text)}#{close_box}".html_safe
           end
         end

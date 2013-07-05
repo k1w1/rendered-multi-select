@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rendered-multi-select (1.0.0)
+    rendered-multi-select (1.0.3)
       jquery-rails
       less-rails-bootstrap
       rails (~> 3.1)
