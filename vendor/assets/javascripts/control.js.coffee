@@ -61,6 +61,7 @@
     createNewItem: (name) ->
       name = $.trim(name)
       return if name.length == 0
+      return if @itemExists(name)
       if @options.onCreateItem
         return unless name = @options.onCreateItem(name)
       @addItemRow(name)
@@ -90,10 +91,7 @@
     showQueryResults: (results) ->
       @resultList.empty()
       # Compute existing items so we can remove duplicates.
-      existingItems = @element.find(".rendered-multi-select-element")
-        .map (index, element) ->
-          $(element).text().slice(0,-1)
-        .get()
+      existingItems = @existingItems()
       resultAdded = false
       for result in results
         continue if $.inArray(result.name, existingItems) != -1
@@ -132,6 +130,15 @@
         style = @options.onStyleItem(name)
       @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'>#{name}<b>&times;</b></li>")  
       
+    itemExists: (name) ->
+      $.inArray(name, @existingItems()) != -1
+      
+    existingItems: ->
+      @element.find(".rendered-multi-select-element")
+        .map (index, element) ->
+          $(element).text().slice(0,-1)
+        .get()
+        
   $.fn.renderedMultiSelect = (options, args...) ->
     @each ->
       $this = $(this)
