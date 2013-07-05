@@ -4,10 +4,11 @@ module RenderedMultiSelect
     def rendered_multi_select(elements, options = {})
       options.symbolize_keys!
       
+      readonly = !!options[:readonly]
       html_options = options[:html] || {}
       tag_options = html_options.merge(
-        :class => "rendered-multi-select #{html_options[:class]}",
-        "data-readonly" => !!options[:readonly])
+        :class => "rendered-multi-select #{html_options[:class]} #{'editable' unless readonly}",
+        "data-readonly" => readonly)
       
       if !!options[:readonly]
         close_box = ""
