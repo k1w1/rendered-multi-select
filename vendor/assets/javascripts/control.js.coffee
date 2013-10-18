@@ -79,6 +79,7 @@
       if @options.onDeleteItem
         @options.onDeleteItem(item.attr("data-id"))
       item.remove()
+      @element.trigger("change")
      
     updateQuery: ->
       q = $.trim(@input.val())
@@ -129,6 +130,7 @@
       if @options.onStyleItem
         style = @options.onStyleItem(name)
       @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'>#{name}<b>&times;</b></li>")  
+      @element.trigger("change")
       
     itemExists: (name) ->
       $.inArray(name, @existingItems()) != -1
