@@ -16,7 +16,10 @@ module RenderedMultiSelect
         close_box = "<b>&times;</b>"
       end
       
-      content_tag(:ul, tag_options) do
+      container_tag = options[:container_tag] || :ul
+      element_tag = options[:element_tag] || :li
+      
+      content_tag(container_tag, tag_options) do
         s = ""
         elements.each do |element|
           text, value = option_text_and_value(element).map { |item| item.to_s }
@@ -26,13 +29,13 @@ module RenderedMultiSelect
             style = nil
           end
           
-          s << content_tag(:li, :class => "rendered-multi-select-element", "data-id" => value, :style => style) do
+          s << content_tag(element_tag, :class => "rendered-multi-select-element", "data-id" => value, :style => style) do
             "#{h(text)}#{close_box}".html_safe
           end
         end
         
         if ! !!options[:readonly]
-          input = content_tag(:li, :class => "rendered-multi-select-input") do
+          input = content_tag(element_tag, :class => "rendered-multi-select-input") do
             content_tag(:input, "", :type => "text", :placeholder => options[:placeholder])
           end
         else
