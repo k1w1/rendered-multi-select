@@ -2,23 +2,23 @@ class RenderedMultiSelect
   constructor: (@element, @options) ->
     return if @element.data("readonly") == "true"
     @inputContainer = @element.find(".rendered-multi-select-input")
-    @input = @inputContainer.find("input")
+    @input = @inputContainer.find(".editable-input")
     @createResultMenu()
     @registerEvents()
     @lastName = null
      
   registerEvents: ->
-    @element.on "keydown", "input", (event) =>
+    @element.on "keydown", ".editable-input", (event) =>
       @inputKeyDown(event)
-    @element.on "keyup", "input", (event) =>
+    @element.on "keyup", ".editable-input", (event) =>
       @updateQuery(event)
-    @element.on "blur", "input", (event) =>
+    @element.on "blur", ".editable-input", (event) =>
       setTimeout =>
           @input.val("")
           @resultMenu.fadeOut()
           @element.removeClass("rendered-multi-select-active")
         , 200
-    @element.on "focus", "input", (event) =>
+    @element.on "focus", ".editable-input", (event) =>
       @element.addClass("rendered-multi-select-active")
       @lastName = null
       @updateQuery()
@@ -43,13 +43,13 @@ class RenderedMultiSelect
         if (result = @resultList.find("li").filter(".selected")).length != 0
           @addItem(result)
         else if @options.allowNew
-          @createNewItem(@input.val())
+          @createNewItem(@input.text())
       when 40 # Down arrow
         @selectNextResult(1)
       when 38 # Up arrow
         @selectNextResult(-1)
       when 8 # Backspace
-        if @input.val().length > 0
+        if @input.text().length > 0
           return
         else
           @deleteLastItem()
@@ -61,7 +61,7 @@ class RenderedMultiSelect
 
   clearInput: ->
     @lastName = null
-    @input.val("")
+    @input.text("")
     @resultMenu.hide()
     
   createNewItem: (name) ->
@@ -88,7 +88,7 @@ class RenderedMultiSelect
     @element.trigger("change")
    
   updateQuery: ->
-    q = $.trim(@input.val())
+    q = $.trim(@input.text())
     return if @lastName == q
     @lastName = q
     if @options.onQuery
@@ -101,10 +101,10 @@ class RenderedMultiSelect
     existingItems = @existingItems()
     resultAdded = false
     for result in results
-      continue if $.inArray(result.name, existingItems) != -1
+      if $.inArray(result.name, existingItems) != -1
+        continue
       @resultList.append("<li data-id='#{result.id}'>#{result.name}</li>")
       resultAdded = true
-    #@resultMenu.css("left", @input.position().left + "px")
     if resultAdded
       # Only if we have focus.
       @resultMenu.show() if $(@input).is(":focus")
