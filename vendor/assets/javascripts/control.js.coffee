@@ -136,7 +136,10 @@ class RenderedMultiSelect
   addItemRow: (name, id) ->
     if @options.onStyleItem
       style = @options.onStyleItem(name)
-    @inputContainer.before("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'>#{name}<b>&times;</b></li>")  
+    row = $("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'></li>")
+    row.text(name)
+    row.append("<b>&times;</b>")
+    @inputContainer.before(row)  
     @element.trigger("change")
     
   itemExists: (name) ->
