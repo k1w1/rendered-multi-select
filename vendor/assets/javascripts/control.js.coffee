@@ -104,7 +104,7 @@ class RenderedMultiSelect
       continue if $.inArray(result.name, existingItems) != -1
       @resultList.append("<li data-id='#{result.id}'>#{result.name}</li>")
       resultAdded = true
-    @resultMenu.css("left", @input.position().left + "px")
+    #@resultMenu.css("left", @input.position().left + "px")
     if resultAdded
       # Only if we have focus.
       @resultMenu.show() if $(@input).is(":focus")
