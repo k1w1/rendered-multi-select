@@ -98,10 +98,10 @@ class RenderedMultiSelect
   showQueryResults: (results) ->
     @resultList.empty()
     # Compute existing items so we can remove duplicates.
-    existingItems = @existingItems()
+    existingIds = @existingIds()
     resultAdded = false
     for result in results
-      if $.inArray(result.name, existingItems) != -1
+      if $.inArray(result.id, existingIds) != -1
         continue
       @resultList.append("<li data-id='#{result.id}'>#{result.name}</li>")
       resultAdded = true
@@ -143,12 +143,18 @@ class RenderedMultiSelect
     @element.trigger("change")
     
   itemExists: (name) ->
-    $.inArray(name, @existingItems()) != -1
-    
-  existingItems: ->
+    $.inArray(name, @existingNames()) != -1
+  
+  existingNames: ->
     @element.find(".rendered-multi-select-element")
       .map (index, element) ->
         $(element).text().slice(0,-1)
+      .get()
+      
+  existingIds: ->
+    @element.find(".rendered-multi-select-element")
+      .map (index, element) ->
+        $(element).attr("data-id")
       .get()
       
 $.fn.renderedMultiSelect = (options, args...) ->
