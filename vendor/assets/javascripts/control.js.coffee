@@ -5,8 +5,10 @@ class RenderedMultiSelect
     @input = @inputContainer.find(".editable-input")
     @createResultMenu()
     @registerEvents()
+    @multiple = @element.data("multiple") == true
     @lastName = null
-     
+    @configureMultiple()
+    
   registerEvents: ->
     @element.on "keydown", ".editable-input", (event) =>
       @inputKeyDown(event)
@@ -31,6 +33,17 @@ class RenderedMultiSelect
     @element.on "click", (event) =>
       # Focus the input when user clicks on the control.
       @input[0].focus()
+      
+    @element.on "change", (event) =>
+      @configureMultiple()
+      
+  configureMultiple: ->
+      # For non-multiple item controls hide input if an item exists.
+      unless @multiple 
+        if @element.find(".rendered-multi-select-element").length > 0
+          @inputContainer.hide()
+        else
+          @inputContainer.show()
   
   createResultMenu: ->
     @resultMenu = $("<div class='rendered-multi-select-menu'><ul class='rendered-multi-select-results'></ul></div")
@@ -99,9 +112,10 @@ class RenderedMultiSelect
     @resultList.empty()
     # Compute existing items so we can remove duplicates.
     existingIds = @existingIds()
+    existingNames = @existingNames()
     resultAdded = false
     for result in results
-      if $.inArray(result.id, existingIds) != -1
+      if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, existingNames) != -1
         continue
       @resultList.append("<li data-id='#{result.id}'>#{result.name}</li>")
       resultAdded = true
@@ -136,6 +150,8 @@ class RenderedMultiSelect
   addItemRow: (name, id) ->
     if @options.onStyleItem
       style = @options.onStyleItem(name)
+    else
+      style = ""
     row = $("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'></li>")
     row.text(name)
     row.append("<b>&times;</b>")
