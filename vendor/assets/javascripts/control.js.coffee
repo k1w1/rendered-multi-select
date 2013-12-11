@@ -8,6 +8,7 @@ class RenderedMultiSelect
     @multiple = @element.data("multiple") == true
     @lastName = null
     @configureMultiple()
+    @blurTimeout = null
     
   registerEvents: ->
     @element.on "keydown", ".editable-input", (event) =>
@@ -15,7 +16,9 @@ class RenderedMultiSelect
     @element.on "keyup", ".editable-input", (event) =>
       @updateQuery(event)
     @element.on "blur", ".editable-input", (event) =>
-      setTimeout =>
+      console.log("blurring")
+      @blurTimeout = setTimeout =>
+          @blurTimeout = null
           @input.val("")
           @resultMenu.fadeOut()
           @element.removeClass("rendered-multi-select-active")
@@ -27,12 +30,18 @@ class RenderedMultiSelect
     @element.on "click", ".rendered-multi-select-menu li", (event) =>
       @addItem($(event.target))
       event.stopPropagation()
+    @element.on "focus", ".rendered-multi-select-menu", (event) =>
+      console.log("Canceling blur on focus")
+      clearTimeout @blurTimeout if @blurTimeout
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
       event.stopPropagation()
     @element.on "click", (event) =>
       # Focus the input when user clicks on the control.
-      @input[0].focus()
+      unless @input.is(":focus")
+        console.log("refocusing")
+        clearTimeout @blurTimeout if @blurTimeout
+        @input[0].focus()
       
     @element.on "change", (event) =>
       @configureMultiple()
