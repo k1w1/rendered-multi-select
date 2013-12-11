@@ -23,6 +23,7 @@ class RenderedMultiSelect
           @element.removeClass("rendered-multi-select-active")
         , 200
     @element.on "focus", ".editable-input", (event) =>
+      clearTimeout @blurTimeout if @blurTimeout
       @element.addClass("rendered-multi-select-active")
       @lastName = null
       @updateQuery()
