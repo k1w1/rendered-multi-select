@@ -30,9 +30,8 @@ class RenderedMultiSelect
     @element.on "click", ".rendered-multi-select-menu li", (event) =>
       @addItem($(event.target))
       event.stopPropagation()
-    @element.on "focus", ".rendered-multi-select-menu", (event) =>
-      console.log("Canceling blur on focus")
-      clearTimeout @blurTimeout if @blurTimeout
+    @element.on "mousedown", ".rendered-multi-select-menu", (event) =>
+      false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
       event.stopPropagation()
