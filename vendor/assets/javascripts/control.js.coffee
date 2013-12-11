@@ -33,6 +33,8 @@ class RenderedMultiSelect
       unless @input.is(":focus")
         clearTimeout @blurTimeout if @blurTimeout
         @input[0].focus()
+    @element.on "mousedown", ".rendered-multi-select-menu", (event) =>
+      false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
       event.stopPropagation()
