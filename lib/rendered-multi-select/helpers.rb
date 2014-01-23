@@ -3,7 +3,7 @@ module RenderedMultiSelect
     
     def rendered_multi_select(elements, options = {})
       options.symbolize_keys!
-      
+
       readonly = !!options[:readonly]
       multiple = options[:multiple] != false
       html_options = options[:html] || {}
@@ -41,6 +41,7 @@ module RenderedMultiSelect
             content_tag(:div, "", :contenteditable => "true", :placeholder => options[:placeholder], :class => "editable-input")
           end
         else
+          s << "<li>&nbsp;</li>" if elements.empty?
           input = ""
         end
         
