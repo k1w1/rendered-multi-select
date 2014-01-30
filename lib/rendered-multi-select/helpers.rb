@@ -37,7 +37,7 @@ module RenderedMultiSelect
         end
         
         if ! !!options[:readonly]
-          input = content_tag(element_tag, :class => "rendered-multi-select-input") do
+          input = content_tag(element_tag, :class => "rendered-multi-select-input", :style => ((!multiple && elements.any?) ? 'display: none;' : '')) do
             content_tag(:div, "", :contenteditable => "true", :placeholder => options[:placeholder], :class => "editable-input")
           end
         else

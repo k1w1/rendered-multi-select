@@ -16,6 +16,8 @@ class RenderedMultiSelect
     @element.on "keyup", ".editable-input", (event) =>
       @updateQuery(event)
     @element.on "blur", ".editable-input", (event) =>
+      # Create any partially edited item.
+      @createNewItem(@input.text())
       @blurTimeout = setTimeout =>
           @blurTimeout = null
           @input.val("")
