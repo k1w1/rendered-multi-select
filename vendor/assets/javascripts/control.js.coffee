@@ -35,7 +35,7 @@ class RenderedMultiSelect
     @element.on "focus", ".rendered-multi-select-menu", (event) =>
       unless @input.is(":focus")
         clearTimeout @blurTimeout if @blurTimeout
-        @input[0].focus()
+        @input[0].focus() if @input[0]
     @element.on "mousedown", ".rendered-multi-select-menu", (event) =>
       false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
@@ -45,7 +45,7 @@ class RenderedMultiSelect
       # Focus the input when user clicks on the control.
       unless @input.is(":focus")
         clearTimeout @blurTimeout if @blurTimeout
-        @input[0].focus()
+        @input[0].focus() if @input[0]
       
     @element.on "change", (event) =>
       @configureMultiple()
