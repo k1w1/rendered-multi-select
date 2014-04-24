@@ -166,7 +166,7 @@ class RenderedMultiSelect
     else
       style = ""
     row = $("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'></li>")
-    row.text(name)
+    row.html(name)
     row.append("<b>&times;</b>")
     @inputContainer.before(row)  
     @element.trigger("change")
