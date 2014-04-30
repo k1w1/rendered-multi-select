@@ -108,9 +108,9 @@ class RenderedMultiSelect
     @updateQuery()
     
   deleteItem: (item) ->
+    item.remove()
     if @options.onDeleteItem
       @options.onDeleteItem(item.attr("data-id"))
-    item.remove()
     @element.trigger("change")
    
   updateQuery: ->
@@ -141,9 +141,9 @@ class RenderedMultiSelect
   addItem: (result) ->
     id = result.attr("data-id")
     name = result.html()
+    @addItemRow(name, id)
     if @options.onAddItem
       @options.onAddItem(id, name)
-    @addItemRow(name, id)
     @resultMenu.hide()
     @clearInput()
     @updateQuery()
