@@ -96,7 +96,7 @@ class RenderedMultiSelect
     return if @itemExists(name)
     if @options.onCreateItem
       return unless name = @options.onCreateItem(name)
-    @addItemRow(name)
+    @addItemRow(_.escape(name))
     @clearInput()
     @updateQuery()
   
