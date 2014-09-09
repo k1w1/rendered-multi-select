@@ -122,6 +122,19 @@ ul.rendered-multi-select {
           &.selected {
             background-color: #eee; 
           }
+
+          &.header-row {
+            font-weight: bold;
+
+            &:hover, &.selected {
+              background-color: #fff !important;
+              color: #444 !important;
+            }
+          }
+
+          &.has-parent {
+            padding-left: 20px;
+          }
         }
       }
     }
