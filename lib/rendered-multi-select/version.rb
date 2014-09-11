@@ -1,3 +1,3 @@
 module RenderedMultiSelect
-  VERSION = "1.0.28"
+  VERSION = "1.0.30"
 end

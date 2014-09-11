@@ -123,23 +123,45 @@ class RenderedMultiSelect
   
   showQueryResults: (results) ->
     @resultList.empty()
-    # Compute existing items so we can remove duplicates.
-    existingIds = @existingIds()
-    existingNames = @existingNames()
-    resultAdded = false
-    for result in results
-      if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, existingNames) != -1
-        continue
-      @resultList.append("<li data-id='#{result.id}'>#{result.name}</li>")
-      resultAdded = true
+
+    if results.length > 0 && results[0].parent
+      groupedResults = @groupResults(results)
+      for parent, results of groupedResults
+        @resultList.append("<li class='header-row'>#{parent}</li>")
+        resultAdded = @appendResults(results, "has-parent")
+    else    
+      resultAdded = @appendResults(results, "")
+
     if resultAdded
       # Only if we have focus.
       @resultMenu.show() if $(@input).is(":focus")
     else
       @resultMenu.hide()
     
+  groupResults: (results) ->
+    groupedResults = {}
+    for result in results
+      groupedResults[result.parent] ||= []
+      groupedResults[result.parent].push(result)
+    groupedResults
+
+  appendResults: (results, classes) ->
+    # Compute existing items so we can remove duplicates.
+    existingIds = @existingIds()
+    existingNames = @existingNames()
+
+    resultAdded = false
+    for result in results
+      if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, existingNames) != -1
+        continue
+      @resultList.append("<li class='#{classes}' data-id='#{result.id}'>#{result.name}</li>")
+      resultAdded = true
+    resultAdded
+
   addItem: (result) ->
     id = result.attr("data-id")
+    unless id
+      return false
     name = result.html()
     @addItemRow(name, id)
     if @options.onAddItem
