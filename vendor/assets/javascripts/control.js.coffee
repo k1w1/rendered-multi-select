@@ -68,6 +68,8 @@ class RenderedMultiSelect
       when 13 # Enter
         if (result = @resultList.find("li").filter(".selected")).length != 0
           @addItem(result)
+        else if @resultList.find("li").length == 1
+          @addItem(@resultList.find("li").first())
         else if @options.allowNew
           @createNewItem(@input.text())
       when 40 # Down arrow
