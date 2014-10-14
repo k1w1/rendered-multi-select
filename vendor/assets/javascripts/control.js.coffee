@@ -156,7 +156,12 @@ class RenderedMultiSelect
     for result in results
       if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, existingNames) != -1
         continue
-      @resultList.append("<li class='#{classes}' data-id='#{result.id}'>#{result.name}</li>")
+
+      name = result.name
+      if existingNames.length > 0 || existingIds.length > 0
+        name = name.replace(/^(&nbsp;)+/, "")
+
+      @resultList.append("<li class='#{classes}' data-id='#{result.id}'>#{name}</li>")
       resultAdded = true
     resultAdded
 
