@@ -86,7 +86,10 @@ class RenderedMultiSelect
         return
     event.stopPropagation()
     event.preventDefault()
-
+  
+  escapeAttr: (v) ->
+    v.replace(/'/g, '&apos;').replace(/"/g, '&quot;')
+  
   clearInput: ->
     @lastName = null
     @input.text("")
@@ -161,7 +164,7 @@ class RenderedMultiSelect
       if existingNames.length > 0 || existingIds.length > 0
         name = name.replace(/^(&nbsp;)+/, "")
 
-      @resultList.append("<li class='#{classes}' data-id='#{result.id}'>#{name}</li>")
+      @resultList.append("<li class='#{classes}' data-id='#{@escapeAttr(result.id)}'>#{name}</li>")
       resultAdded = true
     resultAdded
 
@@ -194,7 +197,7 @@ class RenderedMultiSelect
       style = @options.onStyleItem(name)
     else
       style = ""
-    row = $("<li class='rendered-multi-select-element' data-id='#{id}' style='#{style}'></li>")
+    row = $("<li class='rendered-multi-select-element' data-id='#{@escapeAttr(id)}' style='#{style}'></li>")
     row.html(name)
     row.append("<b>&times;</b>")
     @inputContainer.before(row)  
