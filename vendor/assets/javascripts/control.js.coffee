@@ -88,7 +88,7 @@ class RenderedMultiSelect
     event.preventDefault()
   
   escapeAttr: (v) ->
-    v.replace(/'/g, '&apos;').replace(/"/g, '&quot;')
+    v.replace(/'/g, '&apos;').replace(/"/g, '&quot;') if v?
   
   clearInput: ->
     @lastName = null
