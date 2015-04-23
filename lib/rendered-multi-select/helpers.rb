@@ -41,7 +41,7 @@ module RenderedMultiSelect
             content_tag(:div, "", :contenteditable => "true", :placeholder => options[:placeholder], :class => "editable-input")
           end
         else
-          s << "<li>&nbsp;</li>" if elements.empty?
+          s << "<li id='rendered-multi-select-placeholder-element'>&nbsp;</li>" if elements.empty?
           input = ""
         end
         
