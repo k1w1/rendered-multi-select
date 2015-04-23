@@ -16,11 +16,15 @@ class RenderedMultiSelect
     @element.on "keyup", ".editable-input", (event) =>
       @updateQuery(event)
     @element.on "blur", ".editable-input", (event) =>
-      # Create any partially edited item.
-      @createNewItem(@input.text())
+      # Create any partially edited item if it allows new options
+      if (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
+        @addItem(@resultList.find("li").eq(index))
+      else if @options.allowNew
+        @createNewItem(@input.text())
+
       @blurTimeout = setTimeout =>
           @blurTimeout = null
-          @input.val("")
+          @input.html("")
           @resultMenu.fadeOut()
           @element.removeClass("rendered-multi-select-active")
         , 200
@@ -70,6 +74,8 @@ class RenderedMultiSelect
           @addItem(result)
         else if @resultList.find("li").length == 1
           @addItem(@resultList.find("li").first())
+        else if (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
+          @addItem(@resultList.find("li").eq(index))
         else if @options.allowNew
           @createNewItem(@input.text())
       when 40 # Down arrow
