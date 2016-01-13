@@ -138,8 +138,9 @@ class RenderedMultiSelect
     if results.length > 0 && results[0].parent
       groupedResults = @groupResults(results)
       for parent, results of groupedResults
-        @resultList.append("<li class='header-row'>#{parent}</li>")
-        resultAdded = @appendResults(results, "has-parent")
+        if results.length > 0
+          @resultList.append("<li class='header-row'>#{parent}</li>")
+          resultAdded = @appendResults(results, "has-parent")
     else    
       resultAdded = @appendResults(results, "")
 
@@ -159,15 +160,15 @@ class RenderedMultiSelect
   appendResults: (results, classes) ->
     # Compute existing items so we can remove duplicates.
     existingIds = @existingIds()
-    existingNames = @existingNames()
+    newExistingNames = @newExistingNames()
 
     resultAdded = false
     for result in results
-      if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, existingNames) != -1
+      if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, newExistingNames) != -1
         continue
 
       name = result.name
-      if existingNames.length > 0 || existingIds.length > 0
+      if newExistingNames.length > 0 || existingIds.length > 0
         name = name.replace(/^(&nbsp;)+/, "")
 
       @resultList.append("<li class='#{classes}' data-id='#{@escapeAttr(result.id)}'>#{name}</li>")
@@ -214,6 +215,12 @@ class RenderedMultiSelect
   
   existingNames: ->
     @element.find(".rendered-multi-select-element")
+      .map (index, element) ->
+        $(element).text().slice(0,-1)
+      .get()
+
+  newExistingNames: ->
+    @element.find(".rendered-multi-select-element[data-id=undefined]")
       .map (index, element) ->
         $(element).text().slice(0,-1)
       .get()
