@@ -134,7 +134,8 @@ class RenderedMultiSelect
   
   showQueryResults: (results) ->
     @resultList.empty()
-
+    @resultData = {}
+    
     if results.length > 0 && results[0].parent
       groupedResults = @groupResults(results)
       for parent, results of groupedResults
@@ -170,8 +171,11 @@ class RenderedMultiSelect
       name = result.name
       if newExistingNames.length > 0 || existingIds.length > 0
         name = name.replace(/^(&nbsp;)+/, "")
+      
+      cleanName = _.escape($("<div>#{name}</div>").text())
 
-      @resultList.append("<li class='#{classes}' data-id='#{@escapeAttr(result.id)}'>#{name}</li>")
+      @resultData[result.id] = name
+      @resultList.append("<li class='#{classes}' data-id='#{@escapeAttr(result.id)}'>#{cleanName}</li>")
       resultAdded = true
     resultAdded
 
@@ -179,7 +183,7 @@ class RenderedMultiSelect
     id = result.attr("data-id")
     unless id
       return false
-    name = result.html()
+    name = @resultData[id]
     @addItemRow(name, id)
     if @options.onAddItem
       @options.onAddItem(id, name)
