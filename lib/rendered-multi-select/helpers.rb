@@ -31,7 +31,9 @@ module RenderedMultiSelect
             style = nil
           end
           
-          s << content_tag(element_tag, :class => "rendered-multi-select-element", "data-id" => value, :style => style) do
+          tabindex = !!options[:readonly] ? -1 : 0
+          
+          s << content_tag(element_tag, :class => "rendered-multi-select-element", "data-id" => value, :style => style, tabindex: tabindex) do
             "#{h(text)}#{close_box}".html_safe
           end
         end
