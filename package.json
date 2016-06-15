@@ -1,0 +1,22 @@
+{
+  "name": "rendered-multi-select",
+  "version": "1.0.40",
+  "description": "Javascript control for selecting multiple elements (like tags) that can be rendered server-side.",
+  "main": "vendor/assets/javascripts/rendered-multi-select.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k1w1/rendered-multi-select.git"
+  },
+  "author": "Chris Waters <chris@aha.io>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/k1w1/rendered-multi-select/issues"
+  },
+  "homepage": "https://github.com/k1w1/rendered-multi-select#readme"
+}
