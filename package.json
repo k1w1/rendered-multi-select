@@ -2,7 +2,7 @@
   "name": "rendered-multi-select",
   "version": "1.0.40",
   "description": "Javascript control for selecting multiple elements (like tags) that can be rendered server-side.",
-  "main": "vendor/assets/javascripts/rendered-multi-select.js",
+  "main": "vendor/assets/javascripts/control.js.coffee",
   "directories": {
     "example": "examples"
   },
