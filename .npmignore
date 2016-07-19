@@ -1,0 +1,6 @@
+examples/
+lib/
+config.ru
+Gemfile
+Gemfile.lock
+rendered-multi-select.gemspec
