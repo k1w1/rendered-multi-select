@@ -1,6 +1,7 @@
 class RenderedMultiSelect
   constructor: (@element, @options) ->
     return if @element.data("readonly") == "true"
+    @body = $('body')
     @inputContainer = @element.find(".rendered-multi-select-input")
     @input = @inputContainer.find(".editable-input")
     @createResultMenu()
@@ -33,14 +34,14 @@ class RenderedMultiSelect
       @element.addClass("rendered-multi-select-active")
       @lastName = null
       @updateQuery()
-    @element.on "click", ".rendered-multi-select-menu li", (event) =>
+    @resultMenu.on "click", "li", (event) =>
       @addItem($(event.target))
       event.stopPropagation()
-    @element.on "focus", ".rendered-multi-select-menu", (event) =>
+    @resultMenu.on "focus", (event) =>
       unless @input.is(":focus")
         clearTimeout @blurTimeout if @blurTimeout
         @input[0].focus() if @input[0]
-    @element.on "mousedown", ".rendered-multi-select-menu", (event) =>
+    @resultMenu.on "mousedown", (event) =>
       false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
@@ -64,8 +65,23 @@ class RenderedMultiSelect
   
   createResultMenu: ->
     @resultMenu = $("<div class='rendered-multi-select-menu'><ul class='rendered-multi-select-results'></ul></div")
-    @resultMenu.insertAfter(@input)
+
+    if @element.attr("data-fixed-menu") == "true"
+      @resultMenu.addClass('fixed')
+      @body.append(@resultMenu)
+    else
+      @resultMenu.insertAfter(@input)
+
     @resultList = @resultMenu.find("ul")
+
+  showResultMenu: ->
+    return @resultMenu.show() unless @element.attr("data-fixed-menu") == "true"
+
+    coors = @inputContainer.offset()
+    @resultMenu.css
+      display:  'block',
+      top:      coors.top - @body.scrollTop(),
+      left:     coors.left - @body.scrollLeft(),
     
   inputKeyDown: (event) ->
     switch event.keyCode
@@ -147,7 +163,7 @@ class RenderedMultiSelect
 
     if resultAdded
       # Only if we have focus.
-      @resultMenu.show() if $(@input).is(":focus")
+      @showResultMenu() if $(@input).is(":focus")
     else
       @resultMenu.hide()
     
