@@ -2,6 +2,7 @@ class RenderedMultiSelect
   constructor: (@element, @options) ->
     return if @element.data("readonly") == "true"
     @body = $('body')
+    @win  = $(window)
     @inputContainer = @element.find(".rendered-multi-select-input")
     @input = @inputContainer.find(".editable-input")
     @createResultMenu()
@@ -26,7 +27,7 @@ class RenderedMultiSelect
       @blurTimeout = setTimeout =>
           @blurTimeout = null
           @input.html("")
-          @resultMenu.fadeOut()
+          @hideResultMenu(true)
           @element.removeClass("rendered-multi-select-active")
         , 200
     @element.on "focus", ".editable-input", (event) =>
@@ -77,11 +78,24 @@ class RenderedMultiSelect
   showResultMenu: ->
     return @resultMenu.show() unless @element.attr("data-fixed-menu") == "true"
 
-    coors = @inputContainer.offset()
-    @resultMenu.css
-      display:  'block',
-      top:      coors.top - @body.scrollTop(),
-      left:     coors.left - @body.scrollLeft(),
+    winHeight = @win.height()
+    coors     = @inputContainer.offset()
+    scrollTop = @body.scrollTop()
+    rules     = 
+      display: 'block'
+      left:    coors.left - @body.scrollLeft()
+
+    if winHeight / 2 < coors.top - scrollTop
+      rules.bottom = winHeight - coors.top + scrollTop - @inputContainer.height()
+    else
+      rules.top = coors.top - scrollTop
+
+    @resultMenu.css(rules)
+    @body.css(overflow: 'hidden')
+
+  hideResultMenu: (fade=false) ->
+    @body.css(overflow: 'auto') if @element.attr("data-fixed-menu") == "true"
+    @resultMenu[if fade then 'fadeOut' else 'hide']()
     
   inputKeyDown: (event) ->
     switch event.keyCode
@@ -115,7 +129,7 @@ class RenderedMultiSelect
   clearInput: ->
     @lastName = null
     @input.text("")
-    @resultMenu.hide()
+    @hideResultMenu()
     
   createNewItem: (name) ->
     name = $.trim(name)
@@ -165,7 +179,7 @@ class RenderedMultiSelect
       # Only if we have focus.
       @showResultMenu() if $(@input).is(":focus")
     else
-      @resultMenu.hide()
+      @hideResultMenu()
     
   groupResults: (results) ->
     groupedResults = {}
@@ -203,7 +217,7 @@ class RenderedMultiSelect
     @addItemRow(name, id)
     if @options.onAddItem
       @options.onAddItem(id, name)
-    @resultMenu.hide()
+    @hideResultMenu()
     @clearInput()
     @updateQuery()
   
