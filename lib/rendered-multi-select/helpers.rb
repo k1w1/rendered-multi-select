@@ -10,7 +10,8 @@ module RenderedMultiSelect
       tag_options = html_options.merge(
         :class => "rendered-multi-select #{html_options[:class]} #{'editable' unless readonly}",
         "data-readonly" => readonly,
-        "data-multiple" => multiple)
+        "data-multiple" => multiple,
+        "data-fixed-menu" => options[:fixed_menu])
       
       if !!options[:readonly]
         close_box = ""

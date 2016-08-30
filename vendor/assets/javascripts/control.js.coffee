@@ -19,7 +19,7 @@ class RenderedMultiSelect
       @updateQuery(event)
     @element.on "blur", ".editable-input", (event) =>
       # Create any partially edited item if it allows new options
-      if (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
+      if @input.text() && (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
         @addItem(@resultList.find("li").eq(index))
       else if @options.allowNew
         @createNewItem(@input.text())
