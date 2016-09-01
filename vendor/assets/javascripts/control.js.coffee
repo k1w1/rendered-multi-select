@@ -79,19 +79,22 @@ class RenderedMultiSelect
     return @resultMenu.show() unless @element.attr("data-fixed-menu") == "true"
 
     winHeight = @win.height()
-    coors     = @inputContainer.offset()
+    inputTop  = @inputContainer.offset().top
+    elemLeft  = @element.offset().left
     scrollTop = @body.scrollTop()
     rules     = 
       display: 'block'
-      left:    coors.left - @body.scrollLeft()
+      left:    elemLeft - @body.scrollLeft()
+      width:   @element.width()
 
-    if winHeight / 2 < coors.top - scrollTop
-      rules.bottom = winHeight - coors.top + scrollTop - @inputContainer.height()
+    if winHeight / 2 < inputTop - scrollTop
+      rules.bottom = winHeight - inputTop + scrollTop
     else
-      rules.top = coors.top - scrollTop
+      rules.top = inputTop - scrollTop + @inputContainer.height()
 
     @resultMenu.css(rules)
     @body.css(overflow: 'hidden')
+    return
 
   hideResultMenu: (fade=false) ->
     @body.css(overflow: 'auto') if @element.attr("data-fixed-menu") == "true"
