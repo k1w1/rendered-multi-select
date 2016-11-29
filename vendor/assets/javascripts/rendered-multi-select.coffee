@@ -1,6 +1,8 @@
 class RenderedMultiSelect
   constructor: (@element, @options) ->
     return if @element.data("readonly") == "true"
+    @body = $('body')
+    @win  = $(window)
     @inputContainer = @element.find(".rendered-multi-select-input")
     @input = @inputContainer.find(".editable-input")
     @createResultMenu()
@@ -17,7 +19,7 @@ class RenderedMultiSelect
       @updateQuery(event)
     @element.on "blur", ".editable-input", (event) =>
       # Create any partially edited item if it allows new options
-      if (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
+      if @input.text() && (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
         @addItem(@resultList.find("li").eq(index))
       else if @options.allowNew
         @createNewItem(@input.text())
@@ -25,7 +27,7 @@ class RenderedMultiSelect
       @blurTimeout = setTimeout =>
           @blurTimeout = null
           @input.html("")
-          @resultMenu.fadeOut()
+          @hideResultMenu(true)
           @element.removeClass("rendered-multi-select-active")
         , 200
     @element.on "focus", ".editable-input", (event) =>
@@ -33,14 +35,14 @@ class RenderedMultiSelect
       @element.addClass("rendered-multi-select-active")
       @lastName = null
       @updateQuery()
-    @element.on "click", ".rendered-multi-select-menu li", (event) =>
+    @resultMenu.on "click", "li", (event) =>
       @addItem($(event.target))
       event.stopPropagation()
-    @element.on "focus", ".rendered-multi-select-menu", (event) =>
+    @resultMenu.on "focus", (event) =>
       unless @input.is(":focus")
         clearTimeout @blurTimeout if @blurTimeout
         @input[0].focus() if @input[0]
-    @element.on "mousedown", ".rendered-multi-select-menu", (event) =>
+    @resultMenu.on "mousedown", (event) =>
       false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
@@ -64,8 +66,39 @@ class RenderedMultiSelect
   
   createResultMenu: ->
     @resultMenu = $("<div class='rendered-multi-select-menu'><ul class='rendered-multi-select-results'></ul></div")
-    @resultMenu.insertAfter(@input)
+
+    if @element.attr("data-fixed-menu") == "true"
+      @resultMenu.addClass('fixed')
+      @body.append(@resultMenu)
+    else
+      @resultMenu.insertAfter(@input)
+
     @resultList = @resultMenu.find("ul")
+
+  showResultMenu: ->
+    return @resultMenu.show() unless @element.attr("data-fixed-menu") == "true"
+
+    winHeight = @win.height()
+    inputTop  = @inputContainer.offset().top
+    elemLeft  = @element.offset().left
+    scrollTop = @body.scrollTop()
+    rules     = 
+      display: 'block'
+      left:    elemLeft - @body.scrollLeft()
+      width:   @element.width()
+
+    if winHeight / 2 < inputTop - scrollTop
+      rules.bottom = winHeight - inputTop + scrollTop
+    else
+      rules.top = inputTop - scrollTop + @inputContainer.height()
+
+    @resultMenu.css(rules)
+    @body.css(overflow: 'hidden')
+    return
+
+  hideResultMenu: (fade=false) ->
+    @body.css(overflow: 'auto') if @element.attr("data-fixed-menu") == "true"
+    @resultMenu[if fade then 'fadeOut' else 'hide']()
     
   inputKeyDown: (event) ->
     switch event.keyCode
@@ -99,7 +132,7 @@ class RenderedMultiSelect
   clearInput: ->
     @lastName = null
     @input.text("")
-    @resultMenu.hide()
+    @hideResultMenu()
     
   createNewItem: (name) ->
     name = $.trim(name)
@@ -147,9 +180,9 @@ class RenderedMultiSelect
 
     if resultAdded
       # Only if we have focus.
-      @resultMenu.show() if $(@input).is(":focus")
+      @showResultMenu() if $(@input).is(":focus")
     else
-      @resultMenu.hide()
+      @hideResultMenu()
     
   groupResults: (results) ->
     groupedResults = {}
@@ -187,7 +220,7 @@ class RenderedMultiSelect
     @addItemRow(name, id)
     if @options.onAddItem
       @options.onAddItem(id, name)
-    @resultMenu.hide()
+    @hideResultMenu()
     @clearInput()
     @updateQuery()
   
