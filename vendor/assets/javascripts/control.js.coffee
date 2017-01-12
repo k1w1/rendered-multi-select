@@ -46,7 +46,12 @@ class RenderedMultiSelect
       false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
-      event.stopPropagation()
+    @element.on "keydown", ".rendered-multi-select-element:focus", (event) =>
+      # focused tag has delete 'x' and key is backspace or delete
+      if $(event.target).find('b').length and (event.keyCode == 8 or event.keyCode == 46)
+        event.preventDefault()
+        @deleteItem($(event.target))
+        @element.find(".editable-input").focus()
     @element.on "click", (event) =>
       # Focus the input when user clicks on the control.
       unless @input.is(":focus")
@@ -241,7 +246,7 @@ class RenderedMultiSelect
       style = @options.onStyleItem(name)
     else
       style = ""
-    row = $("<li class='rendered-multi-select-element' data-id='#{@escapeAttr(id)}' style='#{style}'></li>")
+    row = $("<li class='rendered-multi-select-element' data-id='#{@escapeAttr(id)}' style='#{style}' tabindex='0'></li>")
     row.html(name)
     row.append("<b>&times;</b>")
     @inputContainer.before(row)  
