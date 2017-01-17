@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    rendered-multi-select (1.0.41)
+    rendered-multi-select (1.1.0)
       rails (~> 4.1.15)
 
 GEM
