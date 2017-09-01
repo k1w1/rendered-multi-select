@@ -1,6 +1,6 @@
 {
   "name": "rendered-multi-select",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "description": "Javascript control for selecting multiple elements (like tags) that can be rendered server-side.",
   "main": "vendor/assets/javascripts/rendered-multi-select.coffee",
   "directories": {
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/k1w1/rendered-multi-select/issues"
   },
-  "homepage": "https://github.com/k1w1/rendered-multi-select#readme"
+  "homepage": "https://github.com/k1w1/rendered-multi-select#readme",
+  "dependencies": {
+    "lodash": "^4.17.4"
+  }
 }

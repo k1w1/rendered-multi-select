@@ -1,3 +1,5 @@
+_ = require('lodash')
+
 class RenderedMultiSelect
   constructor: (@element, @options) ->
     return if @element.data("readonly") == "true"
@@ -15,8 +17,9 @@ class RenderedMultiSelect
   registerEvents: ->
     @element.on "keydown", ".editable-input", (event) =>
       @inputKeyDown(event)
-    @element.on "keyup", ".editable-input", (event) =>
+    @element.on 'keyup', '.editable-input', _.throttle((=>
       @updateQuery(event)
+      ), 200)
     @element.on "blur", ".editable-input", (event) =>
       # Create any partially edited item if it allows new options
       if @input.text() && (index = @resultList.find("li").map(() -> $(this).text().toLowerCase()).get().indexOf(@input.text().toLowerCase())) >= 0
@@ -197,7 +200,15 @@ class RenderedMultiSelect
     newExistingNames = @newExistingNames()
 
     resultAdded = false
-    for result in results
+    i = 0
+    max = 500
+    if results.length < max
+      max = results.length
+    else
+      tooMany = true
+    while i < max
+      result = results[i]
+      i++
       if $.inArray(result.id, existingIds) != -1 or $.inArray(result.name, newExistingNames) != -1
         continue
 
@@ -210,6 +221,8 @@ class RenderedMultiSelect
       @resultData[result.id] = name
       @resultList.append("<li class='#{classes}' data-id='#{@escapeAttr(result.id)}'>#{cleanName}</li>")
       resultAdded = true
+    if tooMany
+      @resultList.append("<li class='#{classes}' style='color: #ccc;'><small>Too many results, search to display more&#8230;</small></li>")
     resultAdded
 
   addItem: (result) ->
