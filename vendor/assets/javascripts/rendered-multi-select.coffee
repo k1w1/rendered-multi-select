@@ -18,7 +18,7 @@ class RenderedMultiSelect
     @element.on "keydown", ".editable-input", (event) =>
       @inputKeyDown(event)
     @element.on 'keyup', '.editable-input', _.throttle((=>
-      @updateQuery(event)
+      @updateQuery()
       ), 200)
     @element.on "blur", ".editable-input", (event) =>
       # Create any partially edited item if it allows new options
