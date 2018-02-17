@@ -80,6 +80,7 @@ class RenderedMultiSelect
 
   showResultMenu: ->
     return @resultMenu.show() unless @element.attr("data-fixed-menu") == "true"
+    return if @inputContainer.is(":hidden")
 
     winHeight = @win.height()
     inputTop  = @inputContainer.offset().top
@@ -92,8 +93,10 @@ class RenderedMultiSelect
 
     if winHeight / 2 < inputTop - scrollTop
       rules.bottom = winHeight - inputTop + scrollTop
+      rules.top = ""
     else
       rules.top = inputTop - scrollTop + @inputContainer.height()
+      rules.bottom = ""
 
     @resultMenu.css(rules)
     @body.css(overflow: 'hidden')
