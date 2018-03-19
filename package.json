@@ -1,14 +1,14 @@
 {
-  "name": "rendered-multi-select",
+  "name": "@aha-app/rendered-multi-select",
   "version": "1.1.3",
   "description": "Javascript control for selecting multiple elements (like tags) that can be rendered server-side.",
   "main": "vendor/assets/javascripts/rendered-multi-select.coffee",
   "directories": {
     "example": "examples"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "files": [
+    "vendor/assets/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/k1w1/rendered-multi-select.git"
