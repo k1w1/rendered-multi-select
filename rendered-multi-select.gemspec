@@ -14,5 +14,5 @@ Gem::Specification.new do |s|
   s.files         = Dir["vendor/assets/javascripts/*.js.coffee", "vendor/assets/stylesheets/*.css.less", "lib/*" "README.md", "MIT-LICENSE"]
   s.require_paths = ["lib"]
 
-  s.add_dependency 'rails', '~> 4.x'
+  s.add_dependency 'rails', '~> 5.0.0'
 end
