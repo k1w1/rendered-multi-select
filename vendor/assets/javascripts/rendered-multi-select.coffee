@@ -8,13 +8,14 @@ class RenderedMultiSelect
     @inputContainer = @element.find(".rendered-multi-select-input")
     @input = @inputContainer.find(".editable-input")
     @createResultMenu()
-    @registerEvents()
+    @registerElementEvents()
+    @registerResultMenuEvents()
     @multiple = @element.data("multiple") == true
     @lastName = null
     @configureMultiple()
     @blurTimeout = null
     
-  registerEvents: ->
+  registerElementEvents: ->
     @element.on "keydown", ".editable-input", (event) =>
       @inputKeyDown(event)
     @element.on 'keyup', '.editable-input', _.throttle((=>
@@ -38,15 +39,6 @@ class RenderedMultiSelect
       @element.addClass("rendered-multi-select-active")
       @lastName = null
       @updateQuery()
-    @resultMenu.on "click", "li", (event) =>
-      @addItem($(event.target))
-      event.stopPropagation()
-    @resultMenu.on "focus", (event) =>
-      unless @input.is(":focus")
-        clearTimeout @blurTimeout if @blurTimeout
-        @input[0].focus() if @input[0]
-    @resultMenu.on "mousedown", (event) =>
-      false
     @element.on "click", ".rendered-multi-select-element b", (event) =>
       @deleteItem($(event.target).parent(".rendered-multi-select-element"))
       event.stopPropagation()
@@ -58,6 +50,20 @@ class RenderedMultiSelect
       
     @element.on "change", (event) =>
       @configureMultiple()
+
+  registerResultMenuEvents: ->
+    @resultMenu.off "click.renderedMultiSelect"
+    @resultMenu.on "click.renderedMultiSelect", "li", (event) =>
+      @addItem($(event.target))
+      event.stopPropagation()
+    @resultMenu.off "focus.renderedMultiSelect"
+    @resultMenu.on "focus.renderedMultiSelect", (event) =>
+      unless @input.is(":focus")
+        clearTimeout @blurTimeout if @blurTimeout
+        @input[0].focus() if @input[0]
+    @resultMenu.off "mousedown.renderedMultiSelect"
+    @resultMenu.on "mousedown.renderedMultiSelect", (event) =>
+      false
       
   configureMultiple: ->
       # For non-multiple item controls hide input if an item exists.
@@ -172,6 +178,10 @@ class RenderedMultiSelect
         @showQueryResults(results)
   
   showQueryResults: (results) ->
+    if @resultList.parents('body').length == 0
+      @createResultMenu()
+      @registerResultMenuEvents()
+
     @resultList.empty()
     @resultData = {}
     
@@ -293,4 +303,3 @@ $.fn.renderedMultiSelect = (options, args...) ->
       $this.data 'plugin_renderedMultiSelect', (data = new RenderedMultiSelect( $this, options))
     if typeof options == 'string'
       data[options].apply(data, args)
-
